@@ -21,8 +21,8 @@ public class NumberSelectScene : MonoBehaviour
 	}
 
 	// Use this for initialization
-	void Start () {
-
+	void Start () 
+	{
 		P2Btn.onClick.AsObservable().Subscribe(_ =>selectedButton(P2Btn));
 		P3Btn.onClick.AsObservable().Subscribe(_ =>selectedButton(P3Btn));
 		P4Btn.onClick.AsObservable().Subscribe(_ =>selectedButton(P4Btn));
@@ -47,5 +47,6 @@ public class NumberSelectScene : MonoBehaviour
 
 			NumberSelectScene.selectedNumber = 4;
 		}
+		Application.LoadLevel("PlacementScene");
 	}
 }
