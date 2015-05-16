@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 
-public class NumberSelectScene : MonoBehaviour {
-	
+public class NumberSelectScene : MonoBehaviour 
+{	
 	[SerializeField] private Button P2Btn;
 	[SerializeField] private Button P3Btn;
 	[SerializeField] private Button P4Btn;
@@ -15,6 +15,8 @@ public class NumberSelectScene : MonoBehaviour {
 
 	public virtual void Awake() {
 
+		// Get this object.
+		// GameObject obj = GameObject.Find("Canvas-NumberSelectScene");
 		DontDestroyOnLoad(this);
 	}
 
