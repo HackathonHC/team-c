@@ -8,6 +8,8 @@ using System.Collections;
 public class GameScene : MonoBehaviour 
 {
 	[SerializeField]
+	private GameObject field;
+	[SerializeField]
 	private Button rectBtn1_1;
 	[SerializeField]
 	private Button rectBtn1_2;
@@ -79,12 +81,24 @@ public class GameScene : MonoBehaviour
 	private Button rectBtn5_7;
 
 	[SerializeField]
-	private GameObject[] PlayerInfo;
-
+	private GameObject[] playerInfo;
 	[SerializeField]
-	public GameObject Blind;
+	private GameObject blind;
+	[SerializeField]
+	private Sprite	characterSprite1;
+	[SerializeField]
+	private Sprite	characterSprite2;
+	[SerializeField]
+	private Sprite	characterSprite3;
+	[SerializeField]
+	private Sprite	characterSprite4;
+	[SerializeField]
+	private Sprite	characterSprite5;
+	[SerializeField]
+	private Sprite	emptySprite;
 
 	private int playingNumber = 1;
+
 	
 	// Use this for initialization
 	void Start () {
@@ -129,8 +143,10 @@ public class GameScene : MonoBehaviour
 		rectBtn5_6.onClick.AsObservable().Subscribe(_ =>SlectField(5, 6));
 		rectBtn5_7.onClick.AsObservable().Subscribe(_ =>SlectField(5, 7));
 
-		this.InitPlayerInfo();
 		this.DisplayBlind(this.playingNumber);
+		this.InitPlayerInfo();
+		this.ResetCharacter();
+		this.SetupPlayers(this.GetPlayerList());
 	}
 
 	// Update is called once per frame
@@ -139,17 +155,16 @@ public class GameScene : MonoBehaviour
 	}
 
 	void SlectField (int x, int y) {
-		Debug.Log("SlectField :" + x.ToString() + y.ToString());
 
 		this.ChangePlayer();
 	}
-
+	
 	void InitPlayerInfo()
 	{
 		int i=0;
-		foreach ( GameObject info in PlayerInfo ) {
+		foreach ( GameObject info in playerInfo ) {
 
-			if ( i  >= NumberSelectScene.selectedNumber ) {
+			if ( i  >= this.GetSelectedNumber() ) {
 
 				info.SetActive(false);
 			}
@@ -160,7 +175,7 @@ public class GameScene : MonoBehaviour
 
 	void ChangePlayer()
 	{
-		int max = NumberSelectScene.selectedNumber;		// 2 ~ 4
+		int max = this.GetSelectedNumber();		// 2 ~ 4
 
 		this.playingNumber++;
 
@@ -170,14 +185,91 @@ public class GameScene : MonoBehaviour
 		}
 
 		this.DisplayBlind(this.playingNumber);
+		this.ResetCharacter();
+		this.SetupPlayers (this.GetPlayerList());
 	}
 
 	void DisplayBlind( int number )
 	{
-		GameObject blind = (GameObject)Instantiate(this.Blind, this.transform.position, this.transform.rotation);
+		GameObject blind = (GameObject)Instantiate(this.blind, this.transform.position, this.transform.rotation);
 		blind.transform.parent = this.transform;
 
 		Text text = blind.GetComponentInChildren<Text>();
 		text.text = "Player " + number;
+	}
+
+	void SetupPlayers( ArrayList playerList )
+	{
+		int    index  = this.playingNumber - 1;
+		Player player = (Player)playerList[index];
+		this.SetupPlayer (player);
+	}
+
+	void SetupPlayer( Player player )
+	{
+		PlayerDeck deck       = player.deck;
+		ArrayList  characters = deck.characters;
+
+		for ( int i=0; i < characters.Count; i++ ) {
+
+			Character chara = (Character)characters[i];
+			this.PlacementCharacter(chara);
+		}
+	}
+
+	void PlacementCharacter( Character character )
+	{
+		if ( character.DeadFlg == 1 ) {
+
+			return;
+		}
+
+		int    type   = character.CharacterTypeId;
+		Sprite sprite = this.characterSprite1;
+
+		switch ( type ) {
+		case 1: 
+			sprite = this.characterSprite1;
+			break;
+		case 2:
+			sprite = this.characterSprite2;
+			break;
+		case 3:
+			sprite = this.characterSprite3;
+			break;
+		case 4:
+			sprite = this.characterSprite4;
+			break;
+		case 5:
+			sprite = this.characterSprite5;
+			break;
+		}
+
+		string     name   = character.X + "-" + character.Y;
+		GameObject button = this.field.transform.FindChild(name).gameObject;
+		Image      image  = button.GetComponent<Image>();
+		image.sprite = sprite;
+	}
+
+	void ResetCharacter()
+	{
+		int count = this.field.transform.childCount;
+
+		for ( int i=0; i < count; i++ ) {
+
+			GameObject button = this.field.transform.GetChild(i).gameObject;
+			Image      image  = button.GetComponent<Image>();
+			image.sprite = this.emptySprite;
+		}
+	}
+	
+	int GetSelectedNumber()
+	{
+		return PlacementScene.dont_destory_object.selected_number;
+	}
+
+	ArrayList GetPlayerList()
+	{
+		return PlacementScene.dont_destory_object.player_list;
 	}
 }
