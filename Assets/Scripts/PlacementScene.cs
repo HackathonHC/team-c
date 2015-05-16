@@ -338,7 +338,7 @@ public class PlacementScene : MonoBehaviour
 		if (player_id >= selected_number)
 		{
 			dont_destory_object = new DontDestroyObjecter(selected_number, player_list);
-			Application.LoadLevel("NumberSelectScene");
+			Application.LoadLevel("GameScene");
 		} else {
 			foreach (Character caracter in deck.characters)
 			{
