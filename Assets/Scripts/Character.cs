@@ -9,6 +9,6 @@ public class Character
 		Power,
 		AttackCount,
 		Speed,
-		Thu,
+		AttackRange,
 	};
 }

@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
