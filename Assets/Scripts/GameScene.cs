@@ -77,7 +77,11 @@ public class GameScene : MonoBehaviour
 	private Button rectBtn5_6;
 	[SerializeField]
 	private Button rectBtn5_7;
-	
+
+	[SerializeField]
+	public GameObject Blind;
+
+	private int playingNumber = 1;
 	
 	// Use this for initialization
 	void Start () {
@@ -121,7 +125,10 @@ public class GameScene : MonoBehaviour
 		rectBtn5_5.onClick.AsObservable().Subscribe(_ =>SlectField(5, 5));
 		rectBtn5_6.onClick.AsObservable().Subscribe(_ =>SlectField(5, 6));
 		rectBtn5_7.onClick.AsObservable().Subscribe(_ =>SlectField(5, 7));
+
+		this.DisplayBlind(this.playingNumber);
 	}
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -129,5 +136,30 @@ public class GameScene : MonoBehaviour
 
 	void SlectField (int x, int y) {
 		Debug.Log("SlectField :" + x.ToString() + y.ToString());
+
+		this.ChangePlayer();
+	}
+
+	void ChangePlayer()
+	{
+		int max = NumberSelectScene.selectedNumber;		// 2 ~ 4
+
+		this.playingNumber++;
+
+		if ( this.playingNumber > max ) {
+
+			this.playingNumber = 1;
+		}
+
+		this.DisplayBlind(this.playingNumber);
+	}
+
+	void DisplayBlind( int number )
+	{
+		GameObject blind = (GameObject)Instantiate(this.Blind, this.transform.position, this.transform.rotation);
+		blind.transform.parent = this.transform;
+
+		Text text = blind.GetComponentInChildren<Text>();
+		text.text = "Player " + number;
 	}
 }
