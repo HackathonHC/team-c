@@ -79,6 +79,9 @@ public class GameScene : MonoBehaviour
 	private Button rectBtn5_7;
 
 	[SerializeField]
+	private GameObject[] PlayerInfo;
+
+	[SerializeField]
 	public GameObject Blind;
 
 	private int playingNumber = 1;
@@ -126,6 +129,7 @@ public class GameScene : MonoBehaviour
 		rectBtn5_6.onClick.AsObservable().Subscribe(_ =>SlectField(5, 6));
 		rectBtn5_7.onClick.AsObservable().Subscribe(_ =>SlectField(5, 7));
 
+		this.InitPlayerInfo();
 		this.DisplayBlind(this.playingNumber);
 	}
 
@@ -138,6 +142,20 @@ public class GameScene : MonoBehaviour
 		Debug.Log("SlectField :" + x.ToString() + y.ToString());
 
 		this.ChangePlayer();
+	}
+
+	void InitPlayerInfo()
+	{
+		int i=0;
+		foreach ( GameObject info in PlayerInfo ) {
+
+			if ( i  >= NumberSelectScene.selectedNumber ) {
+
+				info.SetActive(false);
+			}
+
+			i++;
+		}
 	}
 
 	void ChangePlayer()
