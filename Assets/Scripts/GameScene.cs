@@ -251,7 +251,17 @@ public class GameScene : MonoBehaviour
 		blind.transform.parent = this.transform;
 
 		Text text = blind.GetComponentInChildren<Text>();
-		text.text = "Player " + number;
+		string name = "";
+		if (number == 1) {
+			name = "一";
+		} else if (number == 2) {
+			name = "二";
+		} else if (number == 3) {
+			name = "三";
+		} else if (number == 4) {
+			name = "四";
+		}
+		text.text = "忍者 " + name;
 	}
 
 	void SetupPlayers( ArrayList playerList )
