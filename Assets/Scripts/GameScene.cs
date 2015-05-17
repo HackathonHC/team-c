@@ -98,12 +98,27 @@ public class GameScene : MonoBehaviour
 	private Sprite	characterSprite5;
 	[SerializeField]
 	private Sprite	emptySprite;
-	
+	[SerializeField]
+	private Sprite	attackRangeSprite;
+	[SerializeField]
+	private Sprite	moveRangeSprite;
+
+	[SerializeField]
+	private GameObject efHit1;
+	[SerializeField]
+	private GameObject efHit2;
+	[SerializeField]
+	private GameObject efHit3;
+	[SerializeField]
+	private GameObject efHit4;
+	[SerializeField]
+	private GameObject efHit5;
+
 	private int playingNumber = 1;
 	private int mode          = 1;		// Attack=1, Move=2
 	private int dropOutCount  = 0;
 	private Character selectCharacter = null;
-
+	
 	
 	// Use this for initialization
 	void Start () {
@@ -199,12 +214,12 @@ public class GameScene : MonoBehaviour
 		if ( button.attackRangeEnable == true ) {
 			
 			this.attack(this.selectCharacter, x, y);
-			this.ChangePlayer();
+			StartCoroutine("ChangePlayer");
 		}
 		else if ( button.moveRangeEnable == true ) {
 
 			this.move(this.selectCharacter, x, y);
-			this.ChangePlayer ();
+			StartCoroutine("ChangePlayer");
 		}
 	}
 	
@@ -222,14 +237,19 @@ public class GameScene : MonoBehaviour
 		}
 	}
 
-	void ChangePlayer()
+	IEnumerator ChangePlayer()
 	{
+		this.ResetCharacter();
+		this.SetupPlayers(this.GetPlayerList());
+
+		yield return new WaitForSeconds(1.0f);
+
 		int max = this.GetSelectedNumber();		// 2 ~ 4
 
 		if ( this.dropOutCount >= max ) {
 
 			Application.LoadLevel("ResultScene");
-			return;
+			yield break;
 		}
 
 		this.playingNumber++;
@@ -329,7 +349,7 @@ public class GameScene : MonoBehaviour
 
 			Image image  = obj.GetComponent<Image>();
 			image.sprite = this.emptySprite;
-			image.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+			image.color  = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 
@@ -450,10 +470,18 @@ public class GameScene : MonoBehaviour
 
 			button.attackRangeEnable = true;
 
-			Image image = obj.GetComponent<Image>();
-			image.color = new Color(1.0f, 0.0f, 0.0f, 0.5f);
+			Image image  = obj.GetComponent<Image>();
 
-			Debug.Log("Display  "+ name);
+			if (image.sprite.Equals(this.emptySprite) == false &&
+			    image.sprite.Equals(this.attackRangeSprite) == false &&
+			    image.sprite.Equals(this.moveRangeSprite) == false ) {
+
+				image.color  = new Color(1.0f, 0.0f, 0.0f, 0.5f);
+				continue;
+			}
+
+			image.sprite = this.attackRangeSprite;
+			image.color  = new Color(1.0f, 1.0f, 1.0f, 0.5f);
 		}
 	}
 
@@ -477,13 +505,25 @@ public class GameScene : MonoBehaviour
 			
 			button.moveRangeEnable = true;
 			
-			Image image = obj.GetComponent<Image>();
-			image.color = new Color(0.0f, 1.0f, 0.0f, 0.5f);			
+			Image image  = obj.GetComponent<Image>();
+
+			if (image.sprite.Equals(this.emptySprite) == false &&
+			    image.sprite.Equals(this.attackRangeSprite) == false &&
+			    image.sprite.Equals(this.moveRangeSprite) == false ) {
+
+				image.color  = new Color(0.0f, 1.0f, 0.0f, 0.5f);			
+				continue;
+			}
+
+			image.sprite = this.moveRangeSprite;
+			image.color  = new Color(1.0f, 1.0f, 1.0f, 0.5f);			
 		}
 	}
 
 	void attack( Character attacker, int x, int y )
 	{
+		bool isMiss = true;
+
 		foreach ( Player player in this.GetPlayerList() ) {
 
 			if ( player.Id == this.playingNumber ) {
@@ -500,7 +540,9 @@ public class GameScene : MonoBehaviour
 					continue;
 				}
 
+				isMiss = false;
 				chara.Damage(attacker.AttackCount);
+				this.PlayHitEffect(attacker, chara, x, y);
 			}
 
 			if ( player.IsDropOut() == true ) {
@@ -510,7 +552,11 @@ public class GameScene : MonoBehaviour
 
 				this.dropOutCount++;
 			}
+		}
 
+		if ( isMiss == true ) {
+
+			this.PlayMissEffect(attacker, null, x, y);
 		}
 	}
 
@@ -546,6 +592,7 @@ public class GameScene : MonoBehaviour
 
 		this.ResetCharacter();
 		this.SetupPlayers(this.GetPlayerList());
+		this.selectCharacter = null;
 	}
 
 	void UpdateGameInfo()
@@ -567,5 +614,40 @@ public class GameScene : MonoBehaviour
 				text.color = new Color(1.0f, 0, 0);
 			}
 		}
+	}
+
+	void PlayHitEffect(Character attacker, Character target, int x, int y)
+	{
+		GameObject button   = this.GetCharacterButton(x, y);
+		Vector2    position = button.transform.position;
+		Quaternion rotation = button.transform.rotation;
+
+		GameObject obj = null;
+
+		switch ( attacker.CharacterTypeId ) {
+		case 1:
+			obj = (GameObject)Instantiate(this.efHit1, position, rotation);
+			break;
+		case 2:
+			obj = (GameObject)Instantiate(this.efHit2, position, rotation);
+			break;
+		case 3:
+			obj = (GameObject)Instantiate(this.efHit3, position, rotation);
+			break;
+		case 4:
+			obj = (GameObject)Instantiate(this.efHit4, position, rotation);
+			break;
+		case 5:
+			obj = (GameObject)Instantiate(this.efHit5, position, rotation);
+			break;
+		}
+
+//		ParticleSystem particle = obj.GetComponent<ParticleSystem>();
+//		particle.transform.parent = button.transform;
+//		particle.Play();
+	}
+
+	void PlayMissEffect(Character attacker, Character target, int x, int y)
+	{
 	}
 }
