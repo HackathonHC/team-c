@@ -13,10 +13,10 @@ public class StartScene : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GameObject aaa = GameObject.Find("EffectHit1");
-		aaa.transform.position = new Vector2(3,3);
-		ParticleSystem particleSystem = aaa.GetComponent<ParticleSystem>();
-		particleSystem.Play();
+//		GameObject aaa = GameObject.Find("EffectHit1");
+//		aaa.transform.position = new Vector2(3,3);
+//		ParticleSystem particleSystem = aaa.GetComponent<ParticleSystem>();
+//		particleSystem.Play();
 
 		startBtn.onClick.AsObservable().Subscribe(_ =>GameStart());
 	}
