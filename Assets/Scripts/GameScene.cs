@@ -98,6 +98,12 @@ public class GameScene : MonoBehaviour
 	private Sprite	characterSprite5;
 	[SerializeField]
 	private Sprite	emptySprite;
+
+	public Sprite character_chibi_image1;
+	public Sprite character_chibi_image2;
+	public Sprite character_chibi_image3;
+	public Sprite character_chibi_image4;
+	public Sprite character_chibi_image5;
 	
 	private int playingNumber = 1;
 	private int mode          = 1;		// Attack=1, Move=2
@@ -289,23 +295,23 @@ public class GameScene : MonoBehaviour
 		}
 
 		int    type   = character.CharacterTypeId;
-		Sprite sprite = this.characterSprite1;
+		Sprite sprite = this.character_chibi_image1;
 
 		switch ( type ) {
 		case 1: 
-			sprite = this.characterSprite1;
+			sprite = this.character_chibi_image1;
 			break;
 		case 2:
-			sprite = this.characterSprite2;
+			sprite = this.character_chibi_image2;
 			break;
 		case 3:
-			sprite = this.characterSprite3;
+			sprite = this.character_chibi_image3;
 			break;
 		case 4:
-			sprite = this.characterSprite4;
+			sprite = this.character_chibi_image4;
 			break;
 		case 5:
-			sprite = this.characterSprite5;
+			sprite = this.character_chibi_image5;
 			break;
 		}
 
