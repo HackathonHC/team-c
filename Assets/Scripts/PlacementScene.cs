@@ -323,6 +323,7 @@ public class PlacementScene : MonoBehaviour
 		SetCharacteSelectBtnEnable(true);
 		SetRectBtnEnable(false);
 		deck.Clear();
+		submitBtn.enabled = false;
 	}
 
 	void submit () 
