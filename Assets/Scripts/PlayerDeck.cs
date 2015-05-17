@@ -15,4 +15,19 @@ public class PlayerDeck
 	{
 		characters.Clear();
 	}
+
+	public int GetAliveCount()
+	{
+		int count =0;
+
+		foreach ( Character chara in characters ) {
+
+			if ( chara.DeadFlg == 0 ) {
+
+				count++;
+			}
+		}
+
+		return count;
+	}
 }

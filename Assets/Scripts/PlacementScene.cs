@@ -179,6 +179,8 @@ public class PlacementScene : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+		AudioManager.Instance.PlayBGM("default_bgm");
+
 		if (player_id == 0)
 		{
 			player_id = 1;
@@ -212,8 +214,10 @@ public class PlacementScene : MonoBehaviour
 	void Update () {
 	}
 
-	void SlectField (int x, int y) {
+	void SlectField (int x, int y) 
+	{
 		Debug.Log("SlectField :" + x.ToString() + y.ToString());
+		AudioManager.Instance.PlaySE("submit2");
 
 		SetRectBtnEnable(false); 
 		character_list_black.SetActiveRecursively(false);
@@ -256,6 +260,7 @@ public class PlacementScene : MonoBehaviour
 	void SelectCharacter (int characterid) 
 	{
 		Debug.Log("SelectCharacter :" + characterid.ToString());
+		AudioManager.Instance.PlaySE("submit2");
 
 		SetRectBtnEnable(true); 
 		character_spec.SetActiveRecursively(true);
@@ -311,6 +316,7 @@ public class PlacementScene : MonoBehaviour
 	void reset () 
 	{
 		Debug.Log("reset!");
+		AudioManager.Instance.PlaySE("cansel");
 
 		foreach (Character caracter in deck.characters)
 		{
@@ -323,11 +329,13 @@ public class PlacementScene : MonoBehaviour
 		SetCharacteSelectBtnEnable(true);
 		SetRectBtnEnable(false);
 		deck.Clear();
+		submitBtn.enabled = false;
 	}
 
 	void submit () 
 	{
 		Debug.Log("submit!!");
+		AudioManager.Instance.PlaySE("submit");
 
 		Player player = new Player(player_id, deck);
 		player_list.Add(player);
@@ -338,7 +346,7 @@ public class PlacementScene : MonoBehaviour
 		if (player_id >= selected_number)
 		{
 			dont_destory_object = new DontDestroyObjecter(selected_number, player_list);
-			Application.LoadLevel("NumberSelectScene");
+			Application.LoadLevel("GameScene");
 		} else {
 			foreach (Character caracter in deck.characters)
 			{

@@ -19,7 +19,7 @@ public class CharacteParam
 
 		// Power
 		Hashtable power_param_hash = new Hashtable();
-		hp_param_hash["name"] = "内藤";
+		power_param_hash["name"] = "内藤";
 		power_param_hash["hp"] = "1";
 		power_param_hash["power"] = "2";
 		power_param_hash["attack_count"] = "1";
@@ -29,7 +29,7 @@ public class CharacteParam
 
 		// AttackCount
 		Hashtable attack_count_param_hash = new Hashtable();
-		hp_param_hash["name"] = "早田";
+		attack_count_param_hash["name"] = "早田";
 		attack_count_param_hash["hp"] = "1";
 		attack_count_param_hash["power"] = "1";
 		attack_count_param_hash["attack_count"] = "2";
@@ -39,7 +39,7 @@ public class CharacteParam
 
 		// Speed
 		Hashtable speed_param_hash = new Hashtable();
-		hp_param_hash["name"] = "佐藤";
+		speed_param_hash["name"] = "佐藤";
 		speed_param_hash["hp"] = "1";
 		speed_param_hash["power"] = "1";
 		speed_param_hash["attack_count"] = "1";
@@ -49,7 +49,7 @@ public class CharacteParam
 
 		// AttackRange
 		Hashtable attack_range_param_hash = new Hashtable();
-		hp_param_hash["name"] = "森";
+		attack_range_param_hash["name"] = "森";
 		attack_range_param_hash["hp"] = "1";
 		attack_range_param_hash["power"] = "1";
 		attack_range_param_hash["attack_count"] = "1";

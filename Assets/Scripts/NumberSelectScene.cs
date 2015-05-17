@@ -23,6 +23,7 @@ public class NumberSelectScene : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		AudioManager.Instance.PlayBGM("default_bgm");
 		P2Btn.onClick.AsObservable().Subscribe(_ =>selectedButton(P2Btn));
 		P3Btn.onClick.AsObservable().Subscribe(_ =>selectedButton(P3Btn));
 		P4Btn.onClick.AsObservable().Subscribe(_ =>selectedButton(P4Btn));
@@ -34,6 +35,7 @@ public class NumberSelectScene : MonoBehaviour
 	}
 
 	void selectedButton( Button btn ) {
+		AudioManager.Instance.PlaySE("submit");
 
 		if ( btn.Equals(this.P2Btn) ) {
 
