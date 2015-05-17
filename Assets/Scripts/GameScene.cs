@@ -162,7 +162,23 @@ public class GameScene : MonoBehaviour
 
 	void SlectField (int x, int y) {
 
-		this.ChangePlayer();
+		int       index         = this.GetCurrentPlayerListIndex();
+		ArrayList players       = this.GetPlayerList();
+		ArrayList hitCharacters = this.GetCharactersInPlace(x, y, (Player)players[index]);
+
+		if ( hitCharacters.Count > 0 ) {
+
+			this.ResetCharacter();
+			this.SetupPlayers (this.GetPlayerList());
+		}
+
+		foreach ( Character chara in hitCharacters ) {
+
+			ArrayList names = this.GetEnableAttackRangeNames(chara);
+			this.DisplayAttackRange(names);
+		}
+
+//		this.ChangePlayer();
 	}
 	
 	void InitPlayerInfo()
@@ -207,7 +223,7 @@ public class GameScene : MonoBehaviour
 
 	void SetupPlayers( ArrayList playerList )
 	{
-		int    index  = this.playingNumber - 1;
+		int    index  = this.GetCurrentPlayerListIndex();
 		Player player = (Player)playerList[index];
 		this.SetupPlayer (player);
 	}
@@ -252,24 +268,40 @@ public class GameScene : MonoBehaviour
 			break;
 		}
 
-		string     name   = character.X + "-" + character.Y;
-		GameObject button = this.field.transform.FindChild(name).gameObject;
+		GameObject button = this.GetCharacterButton(character.X, character.Y);
 		Image      image  = button.GetComponent<Image>();
 		image.sprite = sprite;
 	}
-
+	
 	void ResetCharacter()
 	{
 		int count = this.field.transform.childCount;
 
 		for ( int i=0; i < count; i++ ) {
 
-			GameObject button = this.field.transform.GetChild(i).gameObject;
-			Image      image  = button.GetComponent<Image>();
+			GameObject  	obj    = this.field.transform.GetChild(i).gameObject;
+			CharacterButton button = obj.GetComponent<CharacterButton>();
+
+			button.Reset();
+
+			Image image  = obj.GetComponent<Image>();
 			image.sprite = this.emptySprite;
+			image.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
-	
+
+	GameObject GetCharacterButton( int x, int y )
+	{
+		string name = x + "-" + y;
+
+		return this.GetCharacterButton(name);
+	}
+
+	GameObject GetCharacterButton( string name )
+	{
+		return this.field.transform.FindChild(name).gameObject;
+	}
+
 	int GetSelectedNumber()
 	{
 		return PlacementScene.dont_destory_object.selected_number;
@@ -278,6 +310,90 @@ public class GameScene : MonoBehaviour
 	ArrayList GetPlayerList()
 	{
 		return PlacementScene.dont_destory_object.player_list;
+	}
+
+	int GetCurrentPlayerListIndex()
+	{
+		return this.playingNumber - 1;
+	}
+
+	ArrayList GetCharactersInPlace( int x, int y, Player player )
+	{
+		ArrayList hitCharacters = new ArrayList();
+
+		foreach ( Character chara in player.deck.characters ) {
+			
+			if ( chara.X != x || chara.Y != y ) {
+				
+				continue;
+			}
+
+			hitCharacters.Add(chara);
+		}
+
+		return hitCharacters;
+	}
+
+	ArrayList GetEnableAttackRangeNames( Character chara )
+	{
+		int range = chara.AttackRange;
+		int minX  = chara.X - range;
+		int maxX  = chara.X + range;
+		int minY  = chara.Y - range;
+		int maxY  = chara.Y + range;
+
+		if ( minX < 1 ) {
+
+			minX = 1;
+		}
+		else if ( maxX >= 7 ) {
+
+			maxX = 7;
+		}
+
+		if ( minY < 1 ) {
+
+			minY = 1;
+		}
+		else if ( maxY >= 5 ) {
+
+			maxY = 5;
+		}
+
+		ArrayList points = new ArrayList();
+
+		for ( int x=minX; x <= maxX; x++ ) {
+
+			string name = x + "-" + chara.Y;
+			points.Add(name);
+		}
+
+		for ( int y=minY; y <= maxY; y++ ) {
+
+			string name = chara.X + "-" + y;
+			points.Add(name);
+		}
+
+		return points;
+	}
+
+	void DisplayAttackRange( ArrayList names ) 
+	{
+		foreach ( string name in names ) {
+
+			GameObject      obj    = this.GetCharacterButton(name);
+			CharacterButton button = obj.GetComponent<CharacterButton>();
+
+			if ( button == null ) {
+
+				continue;
+			}
+
+			button.attackRangeEnable = true;
+
+			Image image = obj.GetComponent<Image>();
+			image.color = new Color(1.0f, 0.0f, 0.0f, 0.5f);
+		}
 	}
 
 	void ChangeMode()

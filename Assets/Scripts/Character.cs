@@ -17,6 +17,8 @@ public class Character
 	public int Y { get; set; }
 	public int CharacterTypeId { get; set; }
 	public int DeadFlg { get; set; }
+	public int AttackCount { get; set; }
+	public int AttackRange { get; set; }
 	public PlayerParameterPrefs Param { get; set; }
 	
 	public Character (int id) 
@@ -27,6 +29,8 @@ public class Character
 		Y = 1;
 		CharacterTypeId = 1;
 		DeadFlg = 0;
+		AttackCount = 1;
+		AttackRange = 1;
 	}
 	
 	void Save () 
@@ -35,5 +39,7 @@ public class Character
 		Param.SetY(Y);
 		Param.SetCharacterTypeId(CharacterTypeId);
 		Param.SetDeadFlg(DeadFlg);
+		Param.SetAttackCount(AttackCount);
+		Param.SetAttackRange(AttackRange);
 	}
 }
