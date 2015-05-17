@@ -19,6 +19,7 @@ public class Character
 	public int DeadFlg { get; set; }
 	public int AttackCount { get; set; }
 	public int AttackRange { get; set; }
+	public int MoveRange { get; set; }
 	public PlayerParameterPrefs Param { get; set; }
 	
 	public Character (int id) 
@@ -31,12 +32,12 @@ public class Character
 		DeadFlg = 0;
 		AttackCount = 1;
 		AttackRange = 1;
+		MoveRange   = 3;
 	}
 
 	public void Damage ( int value ) 
 	{
 		this.DeadFlg = 1;
-		Debug.Log ("Damage ["+Id+"]");
 	}
 
 	void Save () 
