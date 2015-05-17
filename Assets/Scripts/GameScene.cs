@@ -107,6 +107,7 @@ public class GameScene : MonoBehaviour
 	
 	// Use this for initialization
 	void Start () {
+		AudioManager.Instance.PlayBGM("bgm");
 
 		rectBtn1_1.onClick.AsObservable().Subscribe(_ =>SlectField(1, 1));
 		rectBtn1_2.onClick.AsObservable().Subscribe(_ =>SlectField(1, 2));
