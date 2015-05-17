@@ -108,8 +108,8 @@ public class PlacementScene : MonoBehaviour
 	public Sprite character_stand_image5;
 	public Sprite empty_character_stand_image;
 
-	private GameObject character_list_black;
-	private GameObject field_black;
+	private GameObject character_list;
+	private GameObject field;
 	private GameObject character_spec;
 
 	private int select_character_id;
@@ -195,16 +195,20 @@ public class PlacementScene : MonoBehaviour
 
 		GameObject player_name = GameObject.Find("Player Name");
 		Text player_name_text = player_name.GetComponent<Text>();
-		player_name_text.text = "プレイヤー" + player_id;
+		player_name_text.text = "挑戦者" + player_id;
 
-		character_list_black = GameObject.Find("Character List Black Out");
-		character_list_black.SetActiveRecursively(false);
+		character_list = GameObject.Find("Character List");
+		CanvasGroup character_list_canvas_group = character_list.GetComponent<CanvasGroup>();
+		character_list_canvas_group.alpha = 1;
 
 		character_spec = GameObject.Find("Character Spec");
-		character_spec.SetActiveRecursively(false);
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 0;
 
-		field_black = GameObject.Find("Field Black Out");
-		field_black.SetActiveRecursively(true);
+		field = GameObject.Find("Field");
+		CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
+		fieldt_canvas_group.alpha = 1;
+		fieldt_canvas_group.interactable = false;
 
 		submitBtn.enabled = false;
 		SetRectBtnEnable(false);
@@ -219,9 +223,18 @@ public class PlacementScene : MonoBehaviour
 		Debug.Log("SlectField :" + x.ToString() + y.ToString());
 		AudioManager.Instance.PlaySE("submit2");
 
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 0;
+
 		SetRectBtnEnable(false); 
-		character_list_black.SetActiveRecursively(false);
-		field_black.SetActiveRecursively(true);
+
+		CanvasGroup character_list_canvas_group = character_list.GetComponent<CanvasGroup>();
+		character_list_canvas_group.alpha = 1;
+		character_list_canvas_group.interactable = true;
+
+		CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
+		fieldt_canvas_group.alpha = 0.3f;
+		fieldt_canvas_group.interactable = false;
 
 		Sprite rect_image = character_image1;
 		if (select_character_id == 1)
@@ -249,8 +262,12 @@ public class PlacementScene : MonoBehaviour
 
 		if (deck.characters.Count == select_count)
 		{
-			character_list_black.SetActiveRecursively(true);
-			field_black.SetActiveRecursively(true);
+			character_list_canvas_group.alpha = 0.3f;
+			character_list_canvas_group.interactable = false;
+
+			fieldt_canvas_group.alpha = 0.3f;
+			fieldt_canvas_group.interactable = false;
+
 			SetRectBtnEnable(false); 
 
 			submitBtn.enabled = true;
@@ -262,10 +279,15 @@ public class PlacementScene : MonoBehaviour
 		Debug.Log("SelectCharacter :" + characterid.ToString());
 		AudioManager.Instance.PlaySE("submit2");
 
-		SetRectBtnEnable(true); 
-		character_spec.SetActiveRecursively(true);
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 1;
 
-		field_black.SetActiveRecursively(false);
+		SetRectBtnEnable(true); 
+
+		CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
+		fieldt_canvas_group.alpha = 1;
+		fieldt_canvas_group.interactable = true;
+
 		select_character_id = characterid;
 
 		Hashtable select_caracter_param = (Hashtable)new CharacteParam().hash[characterid];
@@ -318,14 +340,23 @@ public class PlacementScene : MonoBehaviour
 		Debug.Log("reset!");
 		AudioManager.Instance.PlaySE("cansel");
 
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 0;
+
 		foreach (Character caracter in deck.characters)
 		{
 			GameObject field_rect = GameObject.Find(caracter.X + "-" + caracter.Y);
 			Image field_rect_image = field_rect.GetComponent<Image>();
 			field_rect_image.sprite = empty_character_image;
 		}
-		character_list_black.SetActiveRecursively(false);
-		field_black.SetActiveRecursively(true);
+		CanvasGroup character_list_canvas_group = character_list.GetComponent<CanvasGroup>();
+		character_list_canvas_group.alpha = 1;
+		character_list_canvas_group.interactable = true;
+
+		CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
+		fieldt_canvas_group.alpha = 0.3f;
+		fieldt_canvas_group.interactable = false;
+
 		SetCharacteSelectBtnEnable(true);
 		SetRectBtnEnable(false);
 		deck.Clear();
@@ -368,12 +399,19 @@ public class PlacementScene : MonoBehaviour
 			
 			GameObject player_name = GameObject.Find("Player Name");
 			Text player_name_text = player_name.GetComponent<Text>();
-			player_name_text.text = "プレイヤー" + player_id;
+			player_name_text.text = "挑戦者" + player_id;
 			
-			character_list_black.SetActiveRecursively(false);			
-			character_spec.SetActiveRecursively(false);
-			field_black.SetActiveRecursively(true);
-			
+			CanvasGroup character_list_canvas_group = character_list.GetComponent<CanvasGroup>();
+			character_list_canvas_group.alpha = 1;
+			character_list_canvas_group.interactable = true;
+
+			CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+			character_spec_canvas_group.alpha = 0;
+
+			CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
+			fieldt_canvas_group.alpha = 0.3f;
+			fieldt_canvas_group.interactable = false;
+
 			submitBtn.enabled = false;
 			SetRectBtnEnable(false);
 		}
