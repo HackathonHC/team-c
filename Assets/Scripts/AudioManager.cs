@@ -78,6 +78,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager> {
 	public void PlayBGM(string bgmName)
 	{
 		if(!this.bgmDict.ContainsKey(bgmName)) throw new ArgumentException(bgmName + " not found","bgmName");  
+		this.bgmSource.loop = true;
 		if(this.bgmSource.clip == this.bgmDict[bgmName]) return;
 		this.bgmSource.Stop();
 		this.bgmSource.clip = this.bgmDict[bgmName];
