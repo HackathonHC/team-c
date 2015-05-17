@@ -17,7 +17,7 @@ public class StartScene : MonoBehaviour {
 //		aaa.transform.position = new Vector2(3,3);
 //		ParticleSystem particleSystem = aaa.GetComponent<ParticleSystem>();
 //		particleSystem.Play();
-
+		AudioManager.Instance.PlayBGM("default_bgm");
 		startBtn.onClick.AsObservable().Subscribe(_ =>GameStart());
 	}
 	
@@ -27,6 +27,7 @@ public class StartScene : MonoBehaviour {
 	}
 
 	void GameStart () {
+		AudioManager.Instance.PlaySE("submit");
 		Application.LoadLevel("NumberSelectScene");
 	}
 }

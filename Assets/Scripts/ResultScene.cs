@@ -12,7 +12,7 @@ public class ResultScene : MonoBehaviour
 	
 	// Use this for initialization
 	void Start () {
-
+		AudioManager.Instance.PlayBGM("default_bgm");
 		ContinueBtn.onClick.AsObservable().Subscribe(_ =>Continue());
 	}
 	
@@ -23,6 +23,7 @@ public class ResultScene : MonoBehaviour
 
 	void Continue()
 	{
+		AudioManager.Instance.PlaySE("submit");
 		// Back to title or NumberSelectScene.
 		Application.LoadLevel("NumberSelectScene");
 	}
