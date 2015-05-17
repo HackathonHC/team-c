@@ -177,12 +177,10 @@ public class GameScene : MonoBehaviour
 			foreach ( Character chara in hitCharacters ) {
 
 				if ( this.mode == 1 ) {
-
 					ArrayList names = this.GetEnableRangeNames(chara, chara.AttackRange);
 					this.DisplayAttackRange(names);
 				}
 				else if ( this.mode == 2 ) {
-
 					ArrayList names = this.GetEnableRangeNames(chara, chara.MoveRange);
 					this.DisplayMoveRange(names);
 				}
@@ -197,12 +195,12 @@ public class GameScene : MonoBehaviour
 		CharacterButton button = obj.GetComponent<CharacterButton>();
 		
 		if ( button.attackRangeEnable == true ) {
-			
+			AudioManager.Instance.PlaySE("hit");
 			this.attack(this.selectCharacter, x, y);
 			this.ChangePlayer();
 		}
 		else if ( button.moveRangeEnable == true ) {
-
+			AudioManager.Instance.PlaySE("move");
 			this.move(this.selectCharacter, x, y);
 			this.ChangePlayer ();
 		}
@@ -527,6 +525,7 @@ public class GameScene : MonoBehaviour
 
 	void ChangeMode()
 	{
+		AudioManager.Instance.PlaySE("submit");
 		string text = "";
 
 		if ( this.mode == 1 ) {
