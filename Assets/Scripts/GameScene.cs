@@ -79,6 +79,8 @@ public class GameScene : MonoBehaviour
 	private Button rectBtn5_6;
 	[SerializeField]
 	private Button rectBtn5_7;
+	[SerializeField]
+	private Button modeBtn;
 
 	[SerializeField]
 	private GameObject[] playerInfo;
@@ -96,8 +98,9 @@ public class GameScene : MonoBehaviour
 	private Sprite	characterSprite5;
 	[SerializeField]
 	private Sprite	emptySprite;
-
+	
 	private int playingNumber = 1;
+	private int mode          = 1;		// Attack=1, Move=2
 
 	
 	// Use this for initialization
@@ -143,10 +146,13 @@ public class GameScene : MonoBehaviour
 		rectBtn5_6.onClick.AsObservable().Subscribe(_ =>SlectField(5, 6));
 		rectBtn5_7.onClick.AsObservable().Subscribe(_ =>SlectField(5, 7));
 
+		modeBtn.onClick.AsObservable().Subscribe(_ =>ChangeMode());
+
 		this.DisplayBlind(this.playingNumber);
 		this.InitPlayerInfo();
 		this.ResetCharacter();
 		this.SetupPlayers(this.GetPlayerList());
+		this.UpdateGameInfo();
 	}
 
 	// Update is called once per frame
@@ -187,6 +193,7 @@ public class GameScene : MonoBehaviour
 		this.DisplayBlind(this.playingNumber);
 		this.ResetCharacter();
 		this.SetupPlayers (this.GetPlayerList());
+		this.UpdateGameInfo();
 	}
 
 	void DisplayBlind( int number )
@@ -271,5 +278,40 @@ public class GameScene : MonoBehaviour
 	ArrayList GetPlayerList()
 	{
 		return PlacementScene.dont_destory_object.player_list;
+	}
+
+	void ChangeMode()
+	{
+		string text = "";
+
+		if ( this.mode == 1 ) {
+
+			this.mode = 2;
+			text      = "MOVE";
+		}
+		else {
+
+			this.mode = 1;
+			text      = "ATTACK";
+		}
+
+		Text title = this.modeBtn.GetComponentInChildren<Text>();
+		title.text = text;
+	}
+
+	void UpdateGameInfo()
+	{
+		ArrayList players = this.GetPlayerList();
+
+		for( int i=0; i < players.Count; i++ ) {
+
+			Player 	   player = (Player)players[i];
+			PlayerDeck deck   = player.deck;
+
+			GameObject info = this.playerInfo[i];
+			GameObject obj  = info.transform.FindChild("Character Num").gameObject;
+			Text text = obj.GetComponentInChildren<Text>();
+			text.text = "残り " + deck.GetAliveCount();
+		}
 	}
 }
