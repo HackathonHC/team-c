@@ -114,6 +114,13 @@ public class GameScene : MonoBehaviour
 	[SerializeField]
 	private GameObject efHit5;
 
+
+	public Sprite character_chibi_image1;
+	public Sprite character_chibi_image2;
+	public Sprite character_chibi_image3;
+	public Sprite character_chibi_image4;
+	public Sprite character_chibi_image5;
+	
 	private int playingNumber = 1;
 	private int mode          = 1;		// Attack=1, Move=2
 	private int dropOutCount  = 0;
@@ -192,12 +199,10 @@ public class GameScene : MonoBehaviour
 			foreach ( Character chara in hitCharacters ) {
 
 				if ( this.mode == 1 ) {
-
 					ArrayList names = this.GetEnableRangeNames(chara, chara.AttackRange);
 					this.DisplayAttackRange(names);
 				}
 				else if ( this.mode == 2 ) {
-
 					ArrayList names = this.GetEnableRangeNames(chara, chara.MoveRange);
 					this.DisplayMoveRange(names);
 				}
@@ -212,12 +217,12 @@ public class GameScene : MonoBehaviour
 		CharacterButton button = obj.GetComponent<CharacterButton>();
 		
 		if ( button.attackRangeEnable == true ) {
-			
+			AudioManager.Instance.PlaySE("hit");
 			this.attack(this.selectCharacter, x, y);
 			StartCoroutine("ChangePlayer");
 		}
 		else if ( button.moveRangeEnable == true ) {
-
+			AudioManager.Instance.PlaySE("move");
 			this.move(this.selectCharacter, x, y);
 			StartCoroutine("ChangePlayer");
 		}
@@ -311,23 +316,23 @@ public class GameScene : MonoBehaviour
 		}
 
 		int    type   = character.CharacterTypeId;
-		Sprite sprite = this.characterSprite1;
+		Sprite sprite = this.character_chibi_image1;
 
 		switch ( type ) {
 		case 1: 
-			sprite = this.characterSprite1;
+			sprite = this.character_chibi_image1;
 			break;
 		case 2:
-			sprite = this.characterSprite2;
+			sprite = this.character_chibi_image2;
 			break;
 		case 3:
-			sprite = this.characterSprite3;
+			sprite = this.character_chibi_image3;
 			break;
 		case 4:
-			sprite = this.characterSprite4;
+			sprite = this.character_chibi_image4;
 			break;
 		case 5:
-			sprite = this.characterSprite5;
+			sprite = this.character_chibi_image5;
 			break;
 		}
 
@@ -573,6 +578,7 @@ public class GameScene : MonoBehaviour
 
 	void ChangeMode()
 	{
+		AudioManager.Instance.PlaySE("submit");
 		string text = "";
 
 		if ( this.mode == 1 ) {

@@ -101,6 +101,12 @@ public class PlacementScene : MonoBehaviour
 	public Sprite character_image5;
 	public Sprite empty_character_image;
 
+	public Sprite character_chibi_image1;
+	public Sprite character_chibi_image2;
+	public Sprite character_chibi_image3;
+	public Sprite character_chibi_image4;
+	public Sprite character_chibi_image5;
+
 	public Sprite character_stand_image1;
 	public Sprite character_stand_image2;
 	public Sprite character_stand_image3;
@@ -236,18 +242,18 @@ public class PlacementScene : MonoBehaviour
 		fieldt_canvas_group.alpha = 0.3f;
 		fieldt_canvas_group.interactable = false;
 
-		Sprite rect_image = character_image1;
+		Sprite rect_image = character_chibi_image1;
 		if (select_character_id == 1)
 		{
-			rect_image = character_image1;
+			rect_image = character_chibi_image1;
 		} else if (select_character_id == 2) {
-			rect_image = character_image2;
+			rect_image = character_chibi_image2;
 		} else if (select_character_id == 3) {
-			rect_image = character_image3;
+			rect_image = character_chibi_image3;
 		} else if (select_character_id == 4) {
-			rect_image = character_image4;
+			rect_image = character_chibi_image4;
 		} else if (select_character_id == 5) {
-			rect_image = character_image5;
+			rect_image = character_chibi_image5;
 		}
 
 		GameObject field_rect = GameObject.Find(x + "-" + y);
