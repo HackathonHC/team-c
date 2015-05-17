@@ -69,4 +69,15 @@ public class PlayerParameterPrefs
 	{
 		PlayerPrefs.GetInt (Id.ToString() + "_AttackRange");
 	}
+
+	public void SetMoveRange ( int range )
+	{
+		PlayerPrefs.SetInt (Id.ToString() + "_MoveRange", range);
+	}
+	
+	public void GetMoveRange ()
+	{
+		PlayerPrefs.GetInt (Id.ToString() + "_MoveRange");
+	}
+
 }

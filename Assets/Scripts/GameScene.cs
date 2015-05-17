@@ -101,6 +101,7 @@ public class GameScene : MonoBehaviour
 	
 	private int playingNumber = 1;
 	private int mode          = 1;		// Attack=1, Move=2
+	private int dropOutCount  = 0;
 	private Character selectCharacter = null;
 
 	
@@ -173,9 +174,17 @@ public class GameScene : MonoBehaviour
 			this.SetupPlayers (this.GetPlayerList());
 
 			foreach ( Character chara in hitCharacters ) {
-				
-				ArrayList names = this.GetEnableAttackRangeNames(chara);
-				this.DisplayAttackRange(names);
+
+				if ( this.mode == 1 ) {
+
+					ArrayList names = this.GetEnableRangeNames(chara, chara.AttackRange);
+					this.DisplayAttackRange(names);
+				}
+				else if ( this.mode == 2 ) {
+
+					ArrayList names = this.GetEnableRangeNames(chara, chara.MoveRange);
+					this.DisplayMoveRange(names);
+				}
 
 				this.selectCharacter = chara;
 			}
@@ -189,8 +198,12 @@ public class GameScene : MonoBehaviour
 		if ( button.attackRangeEnable == true ) {
 			
 			this.attack(this.selectCharacter, x, y);
-
 			this.ChangePlayer();
+		}
+		else if ( button.moveRangeEnable == true ) {
+
+			this.move(this.selectCharacter, x, y);
+			this.ChangePlayer ();
 		}
 	}
 	
@@ -211,6 +224,12 @@ public class GameScene : MonoBehaviour
 	void ChangePlayer()
 	{
 		int max = this.GetSelectedNumber();		// 2 ~ 4
+
+		if ( this.dropOutCount >= max ) {
+
+			Application.LoadLevel("ResultScene");
+			return;
+		}
 
 		this.playingNumber++;
 
@@ -312,7 +331,14 @@ public class GameScene : MonoBehaviour
 
 	GameObject GetCharacterButton( string name )
 	{
-		return this.field.transform.FindChild(name).gameObject;
+		Transform t = this.field.transform.FindChild(name);
+
+		if ( t == null ) {
+
+			return null;
+		}
+
+		return t.gameObject;
 	}
 
 	int GetSelectedNumber()
@@ -347,9 +373,8 @@ public class GameScene : MonoBehaviour
 		return hitCharacters;
 	}
 
-	ArrayList GetEnableAttackRangeNames( Character chara )
+	ArrayList GetEnableRangeNames( Character chara, int range )
 	{
-		int range = chara.AttackRange;
 		int minX  = chara.X - range;
 		int maxX  = chara.X + range;
 		int minY  = chara.Y - range;
@@ -421,6 +446,31 @@ public class GameScene : MonoBehaviour
 		}
 	}
 
+	void DisplayMoveRange( ArrayList names ) 
+	{
+		foreach ( string name in names ) {
+			
+			GameObject obj = this.GetCharacterButton(name);
+
+			if ( obj == null ) {
+
+				continue;
+			}
+
+			CharacterButton button = obj.GetComponent<CharacterButton>();
+			
+			if ( button == null ) {
+				
+				continue;
+			}
+			
+			button.moveRangeEnable = true;
+			
+			Image image = obj.GetComponent<Image>();
+			image.color = new Color(0.0f, 1.0f, 0.0f, 0.5f);			
+		}
+	}
+
 	void attack( Character attacker, int x, int y )
 	{
 		foreach ( Player player in this.GetPlayerList() ) {
@@ -441,7 +491,27 @@ public class GameScene : MonoBehaviour
 
 				chara.Damage(attacker.AttackCount);
 			}
+
+			if ( player.IsDropOut() == true ) {
+
+				int ranking = this.GetSelectedNumber() - this.dropOutCount;
+				player.ranking = ranking;
+
+				this.dropOutCount++;
+			}
+
 		}
+	}
+
+	void move( Character character, int x, int y )
+	{
+		if ( character.DeadFlg == 1 ) {
+
+			return;
+		}
+
+		character.X = x;
+		character.Y = y;
 	}
 
 	void ChangeMode()
@@ -452,6 +522,7 @@ public class GameScene : MonoBehaviour
 
 			this.mode = 2;
 			text      = "MOVE";
+
 		}
 		else {
 
@@ -461,6 +532,9 @@ public class GameScene : MonoBehaviour
 
 		Text title = this.modeBtn.GetComponentInChildren<Text>();
 		title.text = text;
+
+		this.ResetCharacter();
+		this.SetupPlayers(this.GetPlayerList());
 	}
 
 	void UpdateGameInfo()
@@ -476,6 +550,11 @@ public class GameScene : MonoBehaviour
 			GameObject obj  = info.transform.FindChild("Character Num").gameObject;
 			Text text = obj.GetComponentInChildren<Text>();
 			text.text = "残り " + deck.GetAliveCount();
+
+			if ( deck.GetAliveCount() <= 1 ) {
+
+				text.color = new Color(1.0f, 0, 0);
+			}
 		}
 	}
 }
