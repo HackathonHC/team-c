@@ -32,7 +32,13 @@ public class Character
 		AttackCount = 1;
 		AttackRange = 1;
 	}
-	
+
+	public void Damage ( int value ) 
+	{
+		this.DeadFlg = 1;
+		Debug.Log ("Damage ["+Id+"]");
+	}
+
 	void Save () 
 	{
 		Param.SetX(X);

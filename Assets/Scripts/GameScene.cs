@@ -101,6 +101,7 @@ public class GameScene : MonoBehaviour
 	
 	private int playingNumber = 1;
 	private int mode          = 1;		// Attack=1, Move=2
+	private Character selectCharacter = null;
 
 	
 	// Use this for initialization
@@ -170,15 +171,27 @@ public class GameScene : MonoBehaviour
 
 			this.ResetCharacter();
 			this.SetupPlayers (this.GetPlayerList());
+
+			foreach ( Character chara in hitCharacters ) {
+				
+				ArrayList names = this.GetEnableAttackRangeNames(chara);
+				this.DisplayAttackRange(names);
+
+				this.selectCharacter = chara;
+			}
+
+			return;
 		}
 
-		foreach ( Character chara in hitCharacters ) {
+		GameObject 		obj    = this.GetCharacterButton(x, y);
+		CharacterButton button = obj.GetComponent<CharacterButton>();
+		
+		if ( button.attackRangeEnable == true ) {
+			
+			this.attack(this.selectCharacter, x, y);
 
-			ArrayList names = this.GetEnableAttackRangeNames(chara);
-			this.DisplayAttackRange(names);
+			this.ChangePlayer();
 		}
-
-//		this.ChangePlayer();
 	}
 	
 	void InitPlayerInfo()
@@ -346,29 +359,39 @@ public class GameScene : MonoBehaviour
 
 			minX = 1;
 		}
-		else if ( maxX >= 7 ) {
+		else if ( maxX >= 5 ) {
 
-			maxX = 7;
+			maxX = 5;
 		}
 
 		if ( minY < 1 ) {
 
 			minY = 1;
 		}
-		else if ( maxY >= 5 ) {
+		else if ( maxY >= 7 ) {
 
-			maxY = 5;
+			maxY = 7;
 		}
 
 		ArrayList points = new ArrayList();
 
 		for ( int x=minX; x <= maxX; x++ ) {
 
+			if ( x == chara.X ) {
+
+				continue;
+			}
+
 			string name = x + "-" + chara.Y;
 			points.Add(name);
 		}
 
 		for ( int y=minY; y <= maxY; y++ ) {
+
+			if ( y == chara.Y ) {
+
+				continue;
+			}
 
 			string name = chara.X + "-" + y;
 			points.Add(name);
@@ -393,6 +416,31 @@ public class GameScene : MonoBehaviour
 
 			Image image = obj.GetComponent<Image>();
 			image.color = new Color(1.0f, 0.0f, 0.0f, 0.5f);
+
+			Debug.Log("Display  "+ name);
+		}
+	}
+
+	void attack( Character attacker, int x, int y )
+	{
+		foreach ( Player player in this.GetPlayerList() ) {
+
+			if ( player.Id == this.playingNumber ) {
+
+				continue;
+			}
+
+			ArrayList characters = this.GetCharactersInPlace(x, y, player);
+
+			foreach ( Character chara in characters ) {
+
+				if ( chara.DeadFlg == 1 ) {
+
+					continue;
+				}
+
+				chara.Damage(attacker.AttackCount);
+			}
 		}
 	}
 
