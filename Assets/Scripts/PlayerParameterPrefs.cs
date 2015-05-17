@@ -49,4 +49,24 @@ public class PlayerParameterPrefs
 	{
 		PlayerPrefs.GetInt (Id.ToString() + "_DeadFlg");
 	}
+
+	public void SetAttackCount ( int count )
+	{
+		PlayerPrefs.SetInt (Id.ToString() + "_AttackCount", count);
+	}
+
+	public void GetAttackCount ()
+	{
+		PlayerPrefs.GetInt (Id.ToString() + "_AttackCount");
+	}
+
+	public void SetAttackRange ( int range )
+	{
+		PlayerPrefs.SetInt (Id.ToString() + "_AttackRange", range);
+	}
+	
+	public void GetAttackRange ()
+	{
+		PlayerPrefs.GetInt (Id.ToString() + "_AttackRange");
+	}
 }
