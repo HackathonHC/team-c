@@ -202,7 +202,8 @@ public class PlacementScene : MonoBehaviour
 		character_list_canvas_group.alpha = 1;
 
 		character_spec = GameObject.Find("Character Spec");
-		character_spec.SetActiveRecursively(false);
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 0;
 
 		field = GameObject.Find("Field");
 		CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
@@ -221,6 +222,9 @@ public class PlacementScene : MonoBehaviour
 	{
 		Debug.Log("SlectField :" + x.ToString() + y.ToString());
 		AudioManager.Instance.PlaySE("submit2");
+
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 0;
 
 		SetRectBtnEnable(false); 
 
@@ -275,12 +279,10 @@ public class PlacementScene : MonoBehaviour
 		Debug.Log("SelectCharacter :" + characterid.ToString());
 		AudioManager.Instance.PlaySE("submit2");
 
-		CanvasGroup character_list_canvas_group = character_list.GetComponent<CanvasGroup>();
-		character_list_canvas_group.alpha = 0.3f;
-		character_list_canvas_group.interactable = false;
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 1;
 
 		SetRectBtnEnable(true); 
-		character_spec.SetActiveRecursively(true);
 
 		CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
 		fieldt_canvas_group.alpha = 1;
@@ -337,6 +339,9 @@ public class PlacementScene : MonoBehaviour
 	{
 		Debug.Log("reset!");
 		AudioManager.Instance.PlaySE("cansel");
+
+		CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+		character_spec_canvas_group.alpha = 0;
 
 		foreach (Character caracter in deck.characters)
 		{
@@ -400,7 +405,8 @@ public class PlacementScene : MonoBehaviour
 			character_list_canvas_group.alpha = 1;
 			character_list_canvas_group.interactable = true;
 
-			character_spec.SetActiveRecursively(false);
+			CanvasGroup character_spec_canvas_group = character_spec.GetComponent<CanvasGroup>();
+			character_spec_canvas_group.alpha = 0;
 
 			CanvasGroup fieldt_canvas_group = field.GetComponent<CanvasGroup>();
 			fieldt_canvas_group.alpha = 0.3f;
