@@ -584,13 +584,13 @@ public class GameScene : MonoBehaviour
 		if ( this.mode == 1 ) {
 
 			this.mode = 2;
-			text      = "MOVE";
+			text      = "移動";
 
 		}
 		else {
 
 			this.mode = 1;
-			text      = "ATTACK";
+			text      = "攻撃";
 		}
 
 		Text title = this.modeBtn.GetComponentInChildren<Text>();
