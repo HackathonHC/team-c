@@ -16,13 +16,14 @@ public class ResultScene : MonoBehaviour
 		ContinueBtn.onClick.AsObservable().Subscribe(_ =>Continue());
 
 		var player_list = (ArrayList)PlacementScene.dont_destory_object.player_list;
+
 		Hashtable ranking_hash = new Hashtable();
 		foreach (Player player in player_list) 
 		{
 			ranking_hash[player.ranking] = player.Id;
 		}
 
-		for (int i=1; i <= ranking_hash.Count; i++)
+		for (int i=1; i <= player_list.Count; i++)
 		{
 			GameObject player_name = GameObject.Find("Text-RankName" + i);
 			Text player_name_text = player_name.GetComponent<Text>();
@@ -40,6 +41,25 @@ public class ResultScene : MonoBehaviour
 			}
 			player_name_text.text = "忍者" + name;
 		}
+
+		if (player_list.Count <= 2) 
+		{
+			GameObject rank3obj = GameObject.Find("Text-Rank3");
+			CanvasGroup rank3obj_canvas_group = rank3obj.GetComponent<CanvasGroup>();
+			rank3obj_canvas_group.alpha = 0;
+
+			GameObject rank4obj = GameObject.Find("Text-Rank4");
+			CanvasGroup rank4obj_canvas_group = rank4obj.GetComponent<CanvasGroup>();
+			rank4obj_canvas_group.alpha = 0;
+		}
+
+		if (player_list.Count <= 3) 
+		{
+			GameObject rank4obj = GameObject.Find("Text-Rank4");
+			CanvasGroup rank4obj_canvas_group = rank4obj.GetComponent<CanvasGroup>();
+			rank4obj_canvas_group.alpha = 0;
+		}
+
 	}
 	
 	// Update is called once per frame
